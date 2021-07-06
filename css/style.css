@@ -1,0 +1,31 @@
+#main-body {
+    height: 500px;
+    background-color: grey;
+    width: 400px;
+    margin: 50px auto;
+    
+}
+
+#screen {
+    height: 50px;
+    background-color: lightgreen;
+}
+
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    height: 450px;
+}
+
+#equalButton {
+    grid-row: 4/6;
+    grid-column: 4/5;
+}
+
+#pButton {
+    grid-column: 3/4;
+}
+
+#zeroButton {
+    grid-column: 1/3;
+}

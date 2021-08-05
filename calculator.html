@@ -5,31 +5,33 @@
         <script src="js/script.js" defer></script>
         <link href="css/reset.css" rel="stylesheet" type="text/css" media="all">
         <link href="css/style.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,900&display=swap" rel="stylesheet"> 
     </head>
     <body>
         <div id="main-body">
-            <div id="screen"></div>
+            <div id="screen">0</div>
             <div id="buttons">
-                <button class="button">AC</button>
-                <button class="button">C</button>
-                <button class="button opButton" id="divButton">/</button>
-                <button class="button opButton" id="mulButton">*</button>
-                <button class="button numButton" value=7>7</button>
-                <button class="button numButton" value=8>8</button>
-                <button class="button numButton" value=9>9</button>
+                <button class="button eraseAll">AC</button>
+                <button class="button eraseOne">C</button>
+                <button class="button opButton" id="divButton" value="/">/</button>
+                <button class="button opButton" id="mulButton" value="*">*</button>
+                <button class="button numButton" data-value="7" data-key="55">7</button>
+                <button class="button numButton" data-value="8" data-key="56">8</button>
+                <button class="button numButton" data-value="9" data-key="57">9</button>
                 <button class="button opButton" id="restButton" value="-">-</button>
-                <button class="button numButton" value=4>4</button>
-                <button class="button numButton" value=5>5</button>
-                <button class="button numButton" value=6>6</button>
-                <button class="button opButton" id="sumButton">+</button>
-                <button class="button numButton" value=1>1</button>
-                <button class="button numButton" value=2>2</button>
-                <button class="button numButton" value=3>3</button>
+                <button class="button numButton" data-value="4" data-key="52">4</button>
+                <button class="button numButton" data-value="5" data-key="53">5</button>
+                <button class="button numButton" data-value="6" data-key="54">6</button>
+                <button class="button opButton" id="sumButton" value="+">+</button>
+                <button class="button numButton" data-value="1" data-key="49">1</button>
+                <button class="button numButton" data-value="2" data-key="50">2</button>
+                <button class="button numButton" data-value="3" data-key="51">3</button>
                 <button class="button" id="equalButton">=</button>
-                <button class="button numButton" id="zeroButton" value=0>0</button>
-                <button class="button" id="pButton">.</button>
-
-            </div>
+                <button class="button numButton" id="zeroButton" data-value="0" data-key="48">0</button>
+                <button class="button" id="pButton" value='.'>.</button>
+</div>
         </div>
     </body>
 </html>

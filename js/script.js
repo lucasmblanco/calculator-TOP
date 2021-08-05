@@ -14,14 +14,15 @@ const mult = function(a,b) {
 const div = function(a,b) {
     return a / b;
   }
-let result = 0;
+
+
+
 function operate(operator,a,b) {
     a = Number(a);
     b = Number(b);
 
     switch (operator) {
     case "+":
-        result = add(a,b);
         return add(a,b);
     case "-":
         return sub(a,b);
@@ -33,71 +34,195 @@ function operate(operator,a,b) {
     }
 }
 
-// -----
-const screen = document.querySelector("#screen");
-const numButton = document.querySelectorAll(".numButton");
-numButton.forEach(item => item.addEventListener('click', numberToScreen));
-screen.value = null;
-screen.addEventListener('click', showValue);
+// TRY 2
 
-function showValue(e) {
-    console.log(e.target.value);
+const screen = document.querySelector('#screen');
+const numericalButtons = document.querySelectorAll('.numButton');
+numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
+
+let valoresA = '';
+let valoresB = '';
+let check = 'a';
+
+function addNumbersA(e) {
+    valoresA += e.target.dataset.value;
+    screen.textContent = valoresA;
+    check = 'a';
 }
 
-let numA = ""; 
-let numB = "";
-let screenData = [];
-let screenNumbers = [];
-let operator;
-
-
-function test (e) {
-    console.log(e.target.value);
-}
-function numberToScreen(e) {
-    screen.textContent += e.target.value;
-    screen.value = screen.textContent;
-};
-
-const opButton = document.querySelectorAll(".opButton");
-opButton.forEach(item => item.addEventListener('click', touchOperator))
-
-function touchOperator(e) {
- screen.value = e.target.value;
- 
-    /*operator = e.target.textContent;
-    screenNumbers.push(screen.textContent);
-    screen.value = null;
-    screen.textContent = numButton.forEach(item => item.addEventListener('click', numberToScreen));
-*/
-    //numButton.forEach(item => item.addEventListener('click', newNumberToScreen));
-    
+function addNumbersB(e) {
+    valoresB += e.target.dataset.value;
+    screen.textContent = valoresB;
+    check = 'b';
 }
 
+const eraseButton = document.querySelector(".eraseAll");
+eraseButton.addEventListener('click', eraseAll)
 
-function newNumberToScreen(e) {
-    screen.textContent = e.target.value;
+function eraseAll() {
+    valoresA = '';
+    op = '';
+    valoresB = '';
+    screen.textContent = '0';
+    numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
+    numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
+    point.addEventListener('click', pointOnScreen);
 }
 
+const eraseOne = document.querySelector(".eraseOne");
+eraseOne.addEventListener('click', eraseO);
 
-/*function inputNumbers(e) {
-    screenData.push(screen.textContent);
-    screenData.push(e.target.textContent);
-}*/
-
-
-/*let a = screenData[0];
-let b = screenData[2];
-let operator = screenData[1];
-*/
-const equalButton = document.getElementById("equalButton");
-
-equalButton.addEventListener('click', equalFunction);
-
-function equalFunction() {
-    let a = screenNumbers[0];
-    let b = screenNumbers[1];
-    operate(operator,a,b);
-    screen.textContent = result;
+function eraseO() {
+    if (check === 'a') {
+   valoresA = valoresA.slice(0,-1);
+   screen.textContent = valoresA;
+   } else if (check == 'b') {
+    valoresB = valoresB.slice(0,-1);
+    screen.textContent = valoresB;
+   }
 }
+
+const operators = document.querySelectorAll('.opButton');
+
+operators.forEach(item => item.addEventListener('click', runOperator));
+
+
+let result = 0;
+let op;
+
+
+function runOperator(e) {
+   // operators.forEach(item => item.classList.add('pressing'));
+   const operatorsButton = document.querySelector(`button[value="${e.target.value}"]`);
+   operatorsButton.classList.add('pressing');
+    if(!op) op = e.target.value;
+    if(!valoresA && op === '-') { 
+        valoresA += op; 
+        screen.textContent = valoresA
+    }
+    if(valoresA) {
+    numericalButtons.forEach(item => item.removeEventListener('click', addNumbersA));
+    window.removeEventListener('keydown', pressKeyValueA);
+    numericalButtons.forEach(item => item.addEventListener('click', addNumbersB));
+    window.addEventListener('keydown', pressKeyValueB);
+    }
+    point.addEventListener('click', pointOnScreen);
+   
+    if(valoresA !== '' && valoresB !== '') {
+        result = operate(op,valoresA,valoresB);
+        screen.textContent = result;
+        valoresA = '';
+        valoresB = '';
+        valoresA = result;
+        op = e.target.value;
+        numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
+        window.removeEventListener('keydown', pressKeyValueB);
+        numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
+        window.addEventListener('keydown', pressKeyValueA);
+    }
+    if(result) {
+        numericalButtons.forEach(item => item.removeEventListener('click', addNumbersA));
+        window.removeEventListener('keydown', pressKeyValueA);
+        numericalButtons.forEach(item => item.addEventListener('click', addNumbersB));
+        window.addEventListener('keydown', pressKeyValueB);
+    }
+    else return;
+}
+
+const point = document.querySelector('#pButton');
+point.addEventListener('click', pointOnScreen)
+
+function pointOnScreen(e) {
+    if(check === 'a') { 
+        valoresA += e.target.value; 
+        screen.textContent = valoresA; 
+        point.removeEventListener('click', pointOnScreen)
+    } else if(check === 'b') { 
+        valoresB += e.target.value; 
+        screen.textContent = valoresB; 
+        point.removeEventListener('click', pointOnScreen);
+    }
+}
+
+const restButton = document.querySelector('#restButton');
+const equalButton = document.querySelector('#equalButton');
+
+equalButton.addEventListener('click', showResults);
+ function showResults() {
+    if(valoresA !== '' && valoresB !== '') {
+    screen.textContent = operate(op,valoresA,valoresB);
+    numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
+    numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
+    }
+    if(result) {
+        numericalButtons.forEach(item => item.removeEventListener('click', addNumbersA));
+        numericalButtons.forEach(item => item.addEventListener('click', addNumbersB));
+    }
+ }
+
+// FALTA UN CERO EN EL INICIO 
+// CUANDO TOCAS PUNTO APARECE UN CERO ANTES
+// NEGATIVO EN EL VALORB 
+
+var mousePosition;
+var offset = [0,0];
+var isDown = false;
+const mainBody = document.querySelector('#main-body');
+
+mainBody.addEventListener('mousedown', function(e) {
+    isDown = true;
+    offset = [
+        mainBody.offsetLeft - e.clientX,
+        mainBody.offsetTop - e.clientY
+        
+    ];
+}, true);
+
+window.addEventListener('mouseup', function() {
+    isDown = false;
+
+}, true);
+
+window.addEventListener('mousemove', function(event) {
+    event.preventDefault();
+    if (isDown) {
+        mousePosition = {
+            x: event.clientX,
+            y: event.clientY
+        };
+        mainBody.style.left = (mousePosition.x + offset[0]) + 'px';
+        mainBody.style.top  = (mousePosition.y + offset[1]) + 'px';
+    }
+}, true);
+
+
+///
+
+window.addEventListener('keydown', pressKeyValueA);
+
+function pressKeyValueA(e) {
+    const keyPress = document.querySelector(`button[data-key="${e.keyCode}"]`);
+    if(!keyPress) return;
+    valoresA += keyPress.dataset.value;
+    screen.textContent = valoresA;
+    check = 'a';
+    keyPress.classList.add('pressing');
+}
+
+function pressKeyValueB(e) {
+    const keyPress = document.querySelector(`button[data-key="${e.keyCode}"]`);
+    if(!keyPress) return;
+    valoresB += keyPress.dataset.value;
+    screen.textContent = valoresB;
+    check = 'b';
+    keyPress.classList.add('pressing');
+}
+
+function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('pressing');
+  }
+numericalButtons.forEach(button => button.addEventListener('transitionend', removeTransition));
+operators.forEach(button => button.addEventListener('transitionend', removeTransition));
+
 

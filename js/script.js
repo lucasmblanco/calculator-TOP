@@ -45,12 +45,16 @@ let valoresB = '';
 let check = 'a';
 
 function addNumbersA(e) {
+    const numeralButtons = document.querySelector(`button[data-value="${e.target.dataset.value}"]`);
+    numeralButtons.classList.add('pressing');
     valoresA += e.target.dataset.value;
     screen.textContent = valoresA;
     check = 'a';
 }
 
 function addNumbersB(e) {
+    const numeralButtons = document.querySelector(`button[data-value="${e.target.dataset.value}"]`);
+    numeralButtons.classList.add('pressing');
     valoresB += e.target.dataset.value;
     screen.textContent = valoresB;
     check = 'b';
@@ -60,8 +64,9 @@ const eraseButton = document.querySelector(".eraseAll");
 eraseButton.addEventListener('click', eraseAll)
 
 function eraseAll() {
+    eraseButton.classList.add('pressingEraseAll');
     valoresA = '';
-    op = '';
+    operator = '';
     valoresB = '';
     screen.textContent = '0';
     numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
@@ -73,6 +78,7 @@ const eraseOne = document.querySelector(".eraseOne");
 eraseOne.addEventListener('click', eraseO);
 
 function eraseO() {
+    eraseOne.classList.add('pressing');
     if (check === 'a') {
    valoresA = valoresA.slice(0,-1);
    screen.textContent = valoresA;
@@ -88,19 +94,19 @@ operators.forEach(item => item.addEventListener('click', runOperator));
 
 
 let result = 0;
-let op;
+let operator;
 
 
 function runOperator(e) {
    // operators.forEach(item => item.classList.add('pressing'));
    const operatorsButton = document.querySelector(`button[value="${e.target.value}"]`);
    operatorsButton.classList.add('pressing');
-    if(!op) op = e.target.value;
-    if(!valoresA && op === '-') { 
-        valoresA += op; 
-        screen.textContent = valoresA
+    if(!operator) operator = e.target.value;
+    if(!valoresA && operator === '-') { 
+        valoresA += operator; 
+        screen.textContent = valoresA;
     }
-    if(valoresA) {
+    if(valoresA && valoresA !== '-') {
     numericalButtons.forEach(item => item.removeEventListener('click', addNumbersA));
     window.removeEventListener('keydown', pressKeyValueA);
     numericalButtons.forEach(item => item.addEventListener('click', addNumbersB));
@@ -109,12 +115,12 @@ function runOperator(e) {
     point.addEventListener('click', pointOnScreen);
    
     if(valoresA !== '' && valoresB !== '') {
-        result = operate(op,valoresA,valoresB);
+        result = operate(operator,valoresA,valoresB);
         screen.textContent = result;
         valoresA = '';
         valoresB = '';
         valoresA = result;
-        op = e.target.value;
+        operator = e.target.value;
         numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
         window.removeEventListener('keydown', pressKeyValueB);
         numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
@@ -133,6 +139,8 @@ const point = document.querySelector('#pButton');
 point.addEventListener('click', pointOnScreen)
 
 function pointOnScreen(e) {
+    const operatorsButton = document.querySelector(`button[value="${e.target.value}"]`);
+    operatorsButton.classList.add('pressing');
     if(check === 'a') { 
         valoresA += e.target.value; 
         screen.textContent = valoresA; 
@@ -149,8 +157,9 @@ const equalButton = document.querySelector('#equalButton');
 
 equalButton.addEventListener('click', showResults);
  function showResults() {
+    equalButton.classList.add('pressing');
     if(valoresA !== '' && valoresB !== '') {
-    screen.textContent = operate(op,valoresA,valoresB);
+    screen.textContent = operate(operator,valoresA,valoresB);
     numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
     numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
     }
@@ -222,7 +231,14 @@ function removeTransition(e) {
     if (e.propertyName !== 'transform') return;
     e.target.classList.remove('pressing');
   }
+
+  function removeTransitionErase(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('pressingEraseAll');
+  }
 numericalButtons.forEach(button => button.addEventListener('transitionend', removeTransition));
 operators.forEach(button => button.addEventListener('transitionend', removeTransition));
-
-
+point.addEventListener('transitionend', removeTransition);
+eraseButton.addEventListener('transitionend', removeTransitionErase);
+equalButton.addEventListener('transitionend', removeTransition);
+eraseOne.addEventListener('transitionend', removeTransition);

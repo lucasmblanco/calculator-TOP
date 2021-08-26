@@ -1,3 +1,9 @@
+let valueA = '';
+let valueB = '';
+let check = 'a';
+let result = 0;
+let operator;
+
 const add = function(a,b){
     return a + b;
 }
@@ -34,29 +40,26 @@ function operate(operator,a,b) {
     }
 }
 
-// TRY 2
-
 const screen = document.querySelector('#screen');
 const numericalButtons = document.querySelectorAll('.numButton');
 numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
 
-let valoresA = '';
-let valoresB = '';
-let check = 'a';
+
+
 
 function addNumbersA(e) {
     const numeralButtons = document.querySelector(`button[data-value="${e.target.dataset.value}"]`);
     numeralButtons.classList.add('pressing');
-    valoresA += e.target.dataset.value;
-    screen.textContent = valoresA;
+    valueA += e.target.dataset.value;
+    screen.textContent = valueA;
     check = 'a';
 }
 
 function addNumbersB(e) {
     const numeralButtons = document.querySelector(`button[data-value="${e.target.dataset.value}"]`);
     numeralButtons.classList.add('pressing');
-    valoresB += e.target.dataset.value;
-    screen.textContent = valoresB;
+    valueB += e.target.dataset.value;
+    screen.textContent = valueB;
     check = 'b';
 }
 
@@ -65,9 +68,9 @@ eraseButton.addEventListener('click', eraseAll)
 
 function eraseAll() {
     eraseButton.classList.add('pressingEraseAll');
-    valoresA = '';
+    valueA = '';
     operator = '';
-    valoresB = '';
+    valueB = '';
     screen.textContent = '0';
     numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
     numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
@@ -80,33 +83,27 @@ eraseOne.addEventListener('click', eraseO);
 function eraseO() {
     eraseOne.classList.add('pressing');
     if (check === 'a') {
-   valoresA = valoresA.slice(0,-1);
-   screen.textContent = valoresA;
+   valueA = valueA.slice(0,-1);
+   screen.textContent = valueA;
    } else if (check == 'b') {
-    valoresB = valoresB.slice(0,-1);
-    screen.textContent = valoresB;
+    valueB = valueB.slice(0,-1);
+    screen.textContent = valueB;
    }
 }
 
 const operators = document.querySelectorAll('.opButton');
-
 operators.forEach(item => item.addEventListener('click', runOperator));
-
-
-let result = 0;
-let operator;
-
 
 function runOperator(e) {
    // operators.forEach(item => item.classList.add('pressing'));
    const operatorsButton = document.querySelector(`button[value="${e.target.value}"]`);
    operatorsButton.classList.add('pressing');
     if(!operator) operator = e.target.value;
-    if(!valoresA && operator === '-') { 
-        valoresA += operator; 
-        screen.textContent = valoresA;
+    if(!valueA && operator === '-') { 
+        valueA += operator; 
+        screen.textContent = valueA;
     }
-    if(valoresA && valoresA !== '-') {
+    if(valueA && valueA !== '-') {
     numericalButtons.forEach(item => item.removeEventListener('click', addNumbersA));
     window.removeEventListener('keydown', pressKeyValueA);
     numericalButtons.forEach(item => item.addEventListener('click', addNumbersB));
@@ -114,12 +111,12 @@ function runOperator(e) {
     }
     point.addEventListener('click', pointOnScreen);
    
-    if(valoresA !== '' && valoresB !== '') {
-        result = operate(operator,valoresA,valoresB);
+    if(valueA !== '' && valueB !== '') {
+        result = operate(operator,valueA,valueB);
         screen.textContent = result;
-        valoresA = '';
-        valoresB = '';
-        valoresA = result;
+        valueA = '';
+        valueB = '';
+        valueA = result;
         operator = e.target.value;
         numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
         window.removeEventListener('keydown', pressKeyValueB);
@@ -142,12 +139,12 @@ function pointOnScreen(e) {
     const operatorsButton = document.querySelector(`button[value="${e.target.value}"]`);
     operatorsButton.classList.add('pressing');
     if(check === 'a') { 
-        valoresA += e.target.value; 
-        screen.textContent = valoresA; 
+        valueA += e.target.value; 
+        screen.textContent = valueA; 
         point.removeEventListener('click', pointOnScreen)
     } else if(check === 'b') { 
-        valoresB += e.target.value; 
-        screen.textContent = valoresB; 
+        valueB += e.target.value; 
+        screen.textContent = valueB; 
         point.removeEventListener('click', pointOnScreen);
     }
 }
@@ -158,8 +155,8 @@ const equalButton = document.querySelector('#equalButton');
 equalButton.addEventListener('click', showResults);
  function showResults() {
     equalButton.classList.add('pressing');
-    if(valoresA !== '' && valoresB !== '') {
-    screen.textContent = operate(operator,valoresA,valoresB);
+    if(valueA !== '' && valueB !== '') {
+    screen.textContent = operate(operator,valueA,valueB);
     numericalButtons.forEach(item => item.removeEventListener('click', addNumbersB));
     numericalButtons.forEach(item => item.addEventListener('click', addNumbersA));
     }
@@ -168,10 +165,6 @@ equalButton.addEventListener('click', showResults);
         numericalButtons.forEach(item => item.addEventListener('click', addNumbersB));
     }
  }
-
-// FALTA UN CERO EN EL INICIO 
-// CUANDO TOCAS PUNTO APARECE UN CERO ANTES
-// NEGATIVO EN EL VALORB 
 
 var mousePosition;
 var offset = [0,0];
@@ -204,16 +197,14 @@ window.addEventListener('mousemove', function(event) {
     }
 }, true);
 
-
 ///
-
 window.addEventListener('keydown', pressKeyValueA);
 
 function pressKeyValueA(e) {
     const keyPress = document.querySelector(`button[data-key="${e.keyCode}"]`);
     if(!keyPress) return;
-    valoresA += keyPress.dataset.value;
-    screen.textContent = valoresA;
+    valueA += keyPress.dataset.value;
+    screen.textContent = valueA;
     check = 'a';
     keyPress.classList.add('pressing');
 }
@@ -221,8 +212,8 @@ function pressKeyValueA(e) {
 function pressKeyValueB(e) {
     const keyPress = document.querySelector(`button[data-key="${e.keyCode}"]`);
     if(!keyPress) return;
-    valoresB += keyPress.dataset.value;
-    screen.textContent = valoresB;
+    valueB += keyPress.dataset.value;
+    screen.textContent = valueB;
     check = 'b';
     keyPress.classList.add('pressing');
 }

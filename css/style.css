@@ -53,11 +53,12 @@ button {
     background-color:  #4e4619;
     border: none;
     border-radius: 10px;
-    transition: all 0.2s ease;
+    transition: all 0.09s ease;
 }
 
 button:hover {
     background-color: #bfac2e;
+    transition-duration: 0.1s;
 }
 
 #equalButton {
@@ -79,16 +80,18 @@ button:hover {
 
 .eraseAll:hover {
     background-color: #ff4040  !important;
+    transition-duration: 0.1s;
 }
 
 .pressing {
-    transform: scale(0.8);
+    transition-delay: 0.001s;
+    transform: scale(0.9);
     border-color: #ffc600;
     box-shadow: 0 0 1rem #ffc600;
 }
 
 .pressingEraseAll {
-    transform: scale(0.8);
+    transform: scale(0.9);
     border-color: #f52626;
     box-shadow: 0 0 1rem #f52626;
 }
